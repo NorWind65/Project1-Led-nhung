@@ -18,7 +18,7 @@ LedControl lc= LedControl(DIN,CLK,CS,0);
 void changeMode(){
     lc.clearDisplay(0);
     pos=0;
-    status_led ++ ;
+    status_led +=1 ;
     if(status_led > 2) status_led -= 3;
 }
 
@@ -71,15 +71,16 @@ void loop() {
     lc.shutdown(0,false);
       for(int j=0 ;j<8 ;j++){
               for(int i=0; i<8; i++){
-                if(status_led != 1 ) break;
+                if(status_led != 1 ){pos=0; break;}
                 int pac= PacMan[ j  ][ ( i+pos ) - ((i+pos)/MaxN)*MaxN ] ;
                 if( pos%2 ) pac=  PacMan2[ j  ][ ( i+pos ) - ((i+pos)/MaxN)*MaxN ] ;
                 
                 lc.setLed(0,j,i,pac);
               }
             }
-            pos++;
-            if(pos >= MaxN) pos-=MaxN;
+      delay(40);
+      pos++;
+      if(pos >= MaxN) pos-=MaxN;
     
     }
 
@@ -87,18 +88,18 @@ void loop() {
     lc.shutdown(0,false);
       for(int j=0 ;j<8 ;j++){
               for(int i=0; i<8; i++){
-                if(status_led != 2 ) break;
-                int pac= Word[ j  ][ ( i+pos ) - ((i+pos)/MaxN)*MaxN ] ;
+                if(status_led != 2 ) {pos=0; break;}
+                int bit= Word[ j  ][ ( i+pos ) - ((i+pos)/MaxN)*MaxN ] ;
                
-                lc.setLed(0,j,i,pac);
+                lc.setLed(0,j,i,bit);
               }
             }
-            pos++;
-            if(pos >= MaxN) pos-=MaxN;
-    
+      delay(40);
+      pos++;
+      if(pos >= MaxN) pos-=MaxN;
     }
     if(status_led == 0 ) {
       lc.shutdown(0,true);
-  
+      pos=0;
     }
 }
